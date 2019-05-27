@@ -12,8 +12,18 @@ usage() {
 edfsay is command that EDF says a message.
 
 Usage:
+    edfsay [options]
+    edfsay commlog [options]
+    edfsay commlog [options] (2 | 3 | 4 | 5)
+    edfsay chat [options]
 
 Examples:
+    edfsay
+    edfsay commlog
+    edfsay commlog 3
+    edfsay commlog 4
+    edfsay commlog 5
+    edfsay broadcast
     edfsay chat yes
     edfsay chat angry
 
@@ -21,7 +31,9 @@ Options:
     -h, --help          このヘルプを出力する
     -v, --version       バージョン情報を出力する
     -r, --random        ランダムにセリフを発する
-
+    -a, --all           全部出力する
+        --sd            echo-sd
+    -s, --scientist     サテキチ、スプキチ科学者のセリフ
 EOS
 }
 
