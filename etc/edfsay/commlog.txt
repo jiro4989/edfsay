@@ -1,0 +1,12 @@
+genre,voice
+scientist,エアレイダー、あなたいい男ね...
+scientist,エアレイダー、あなたは見る目があるわぁ。
+scientist,回路が焼き切れてる。修理して、急いで。
+scientist,地獄の業火に焼かれて死になさい！
+scientist,この兵器を作った者は天才に違いないわ。
+scientist,この衛星を作ったのは私、つまり私が神！
+scientist,神をも滅する光の槍...
+scientist,総司令部が恐れ、封印した力...！
+scientist,アーハッハッハッハッ！！！
+scientist,消滅すればいい...
+scientist,蒸発させてあげる。
