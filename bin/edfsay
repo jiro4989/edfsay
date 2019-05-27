@@ -8,11 +8,13 @@ readonly VERSION=v1.0.0
 readonly RESOURCE_DIR=/usr/local/etc/edfsay
 
 main() {
-  say_chat $RESOURCE_DIR/chat.txt
-}
+  local sub_cmd=""
+  local print_all=false
+  local use_echosd=false
+  local scientist_say=false
+  local chat_genre=false
+  local line_count=1
 
-get_opts() {
-  local opt_use_unko_color=false
   while (( 0 < $# )); do
     local opt=$1
     shift
@@ -28,34 +30,79 @@ get_opts() {
         exit
         ;;
 
+      '-a'|'--all')
+        print_all=true
+        ;;
+
+      '--sd')
+        use_echosd=true
+        ;;
+
+      '-s'|"--scientist")
+        scientist_say=true
+        ;;
+
+      '-n'|'--linecount')
+        line_count=$1
+        shift
+        if [[ ! "$line_count" =~ ^[0-9]+$ ]]; then
+          usage
+          exit 1
+        fi
+        ;;
+
       chat)
+        sub_cmd=$opt
+        chat_genre=$1
+        shift
+        if [[ ! "$chat_genre" =~ $(get_genre_regexp $RESOURCE_DIR/chat.txt) ]]; then
+          usage
+          exit 1
+        fi
         ;;
 
       commlog)
+        sub_cmd=$opt
         ;;
 
       *)
-        opt_unko_level=$opt
+        usage
+        exit 1
         ;;
     esac
   done
 
-  if [ "$opt_use_unko_color" = true ]; then
-    opt_red=217
-    opt_green=112
-    opt_blue=2
-  fi
+  case "$sub_cmd" in
+    chat)
+      say_chat $RESOURCE_DIR/chat.txt $chat_genre $line_count
+      ;;
+    commlog)
+      say_commlog
+      ;;
+    "")
+      ;;
+  esac
 }
 
 ## チャット定型文を返す。
 say_chat() {
   local chat_file=$1
-  grep -vEe "^\s*#" -e "^$" $chat_file | tail +2 | cut -d , -f 2
+  local chat_genre=$2
+  local line_count=$3
+  grep -vEe "^\s*#" -e "^$" $chat_file \
+    | tail +2 \
+    | awk -F , '$1~/'"$chat_genre"'/{print $2}' \
+    | head -n $line_count
 }
 
 ## 通信記録を返す。
 say_commlog() {
   :
+}
+
+get_genre_regexp() {
+  local chat_file=$1
+  tail +2 "$chat_file" | cut -d , -f 1 | sort | uniq | tr '\n' '|' | sed -Ee 's/.$/)/' -e 's/^/(/'
 }
 
 usage() {
@@ -81,10 +128,10 @@ Examples:
 Options:
     -h, --help          このヘルプを出力する
     -v, --version       バージョン情報を出力する
-    -r, --random        ランダムにセリフを発する
     -a, --all           全部出力する
         --sd            echo-sd
     -s, --scientist     サテキチ、スプキチ科学者のセリフ
+    -n, --linecount     何行出力するか [default: 1]
 EOS
 }
 
