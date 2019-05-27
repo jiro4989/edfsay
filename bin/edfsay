@@ -23,12 +23,12 @@ main() {
     case "$opt" in
       '-h'|'--help')
         usage
-        exit
+        return 0
         ;;
 
       '-v'|'--version')
         echo $VERSION
-        exit
+        return 0
         ;;
 
       '-a'|'--all')
@@ -48,7 +48,7 @@ main() {
         shift
         if [[ ! "$line_count" =~ ^[0-9]+$ ]]; then
           usage
-          exit 1
+          return 1
         fi
         ;;
 
@@ -58,7 +58,7 @@ main() {
         shift
         if [[ ! "$chat_genre" =~ $(get_genre_regexp $RESOURCE_DIR/chat.txt) ]] && [[ ! "$chat_genre" = "" ]]; then
           usage
-          exit 1
+          return 1
         fi
         ;;
 
@@ -68,13 +68,13 @@ main() {
         shift
         if [[ ! "$commlog_genre" =~ $(get_genre_regexp $RESOURCE_DIR/commlog.txt) ]] && [[ ! "$commlog_genre" = "" ]]; then
           usage
-          exit 1
+          return 1
         fi
         ;;
 
       *)
         usage
-        exit 1
+        return 1
         ;;
     esac
   done
@@ -105,7 +105,7 @@ say() {
 
 get_genre_regexp() {
   local chat_file=$1
-  tail +2 "$chat_file" | cut -d , -f 1 | sort | uniq | tr '\n' '|' | sed -Ee 's/.$/)/' -e 's/^/(/'
+  tail +2 "$chat_file" | cut -d , -f 1 | sort | uniq | tr '\n' '|' | sed -E 's/.*/(&)/'
 }
 
 usage() {
@@ -120,21 +120,26 @@ Usage:
 
 Examples:
     edfsay
+    edfsay chat yes
+    edfsay chat angry
     edfsay commlog
     edfsay commlog 3
     edfsay commlog 4
     edfsay commlog 5
     edfsay commlog scientist
-    edfsay chat yes
-    edfsay chat angry
+
+Commands:
+    chat       チャット定型文から任意の数セリフを発する
+    commlog    通信記録から任意の数セリフを発する
 
 Options:
     -h, --help          このヘルプを出力する
     -v, --version       バージョン情報を出力する
     -a, --all           全部出力する
-        --sd            echo-sd
+        --sd            echo-sdを使う
     -n, --linecount     何行出力するか [default: 1]
 EOS
 }
 
 main ${1+"$@"}
+exit $?
