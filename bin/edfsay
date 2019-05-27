@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+# チャット: https://www65.atwiki.jp/edf5/pages/148.html
+
 main() {
   echo 1
 }
@@ -11,10 +14,13 @@ edfsay is command that EDF says a message.
 Usage:
 
 Examples:
+    edfsay chat yes
+    edfsay chat angry
 
 Options:
     -h, --help          このヘルプを出力する
     -v, --version       バージョン情報を出力する
+    -r, --random        ランダムにセリフを発する
 
 EOS
 }
