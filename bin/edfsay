@@ -5,9 +5,10 @@
 # チャット: https://www65.atwiki.jp/edf5/pages/148.html
 
 readonly VERSION=v1.0.0
+readonly RESOURCE_DIR=/usr/local/etc/edfsay
 
 main() {
-  echo 1
+  say_chat $RESOURCE_DIR/chat.txt
 }
 
 get_opts() {
@@ -48,12 +49,13 @@ get_opts() {
 
 ## チャット定型文を返す。
 say_chat() {
-
+  local chat_file=$1
+  grep -vEe "^\s*#" -e "^$" $chat_file | tail +2 | cut -d , -f 2
 }
 
 ## 通信記録を返す。
 say_commlog() {
-
+  :
 }
 
 usage() {
