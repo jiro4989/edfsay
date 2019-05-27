@@ -1,0 +1,22 @@
+#!/bin/bash
+
+main() {
+  echo 1
+}
+
+usage() {
+  cat << EOS
+edfsay is command that EDF says a message.
+
+Usage:
+
+Examples:
+
+Options:
+    -h, --help          このヘルプを出力する
+    -v, --version       バージョン情報を出力する
+
+EOS
+}
+
+main ${1+"$@"}
