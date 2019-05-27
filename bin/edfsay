@@ -1,12 +1,59 @@
 #!/bin/bash
 
-
 # 名言: https://www2.atwiki.jp/edf41/pages/91.html
 #       https://www65.atwiki.jp/edf5/pages/164.html
 # チャット: https://www65.atwiki.jp/edf5/pages/148.html
 
+readonly VERSION=v1.0.0
+
 main() {
   echo 1
+}
+
+get_opts() {
+  local opt_use_unko_color=false
+  while (( 0 < $# )); do
+    local opt=$1
+    shift
+
+    case "$opt" in
+      '-h'|'--help')
+        usage
+        exit
+        ;;
+
+      '-v'|'--version')
+        echo $VERSION
+        exit
+        ;;
+
+      chat)
+        ;;
+
+      commlog)
+        ;;
+
+      *)
+        opt_unko_level=$opt
+        ;;
+    esac
+  done
+
+  if [ "$opt_use_unko_color" = true ]; then
+    opt_red=217
+    opt_green=112
+    opt_blue=2
+  fi
+}
+
+## チャット定型文を返す。
+say_chat() {
+
+}
+
+## 通信記録を返す。
+say_commlog() {
+
 }
 
 usage() {
