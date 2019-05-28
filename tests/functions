@@ -31,6 +31,26 @@ blue() {
   echo -e "\x1b[34m${msg}\x1b[0m"
 }
 
+__color_echo() {
+  echo -e "${PAD}$($1 [$2]) $3" >&2
+}
+
+__echo_ok() {
+  __color_echo green OK $1
+}
+
+__echo_ng() {
+  __color_echo red NG $1
+}
+
+__echo_success() {
+  __color_echo green SUCCESS $1
+}
+
+__echo_failure() {
+  __color_echo red FAILURE $1
+}
+
 ## assert_eq はexpectとgotの値の一致を検証する。
 ## 一致の場合は OK を出力し、正常終了する。
 ## 不一致の場合は NG を出力し、異常終了する。
@@ -50,13 +70,37 @@ assert_eq() {
   TEST_COUNT=$((TEST_COUNT+1))
 
   if [ "$expect" = "$got" ]; then
-    echo -e "${PAD}$(green [OK]) $desc" >&2
+    __echo_ok "$desc"
     return 0
   else
     FAILED_COUNT=$((FAILED_COUNT+1))
-    echo -e "${PAD}$(red [NG]) $desc (expect = $expect, got = $got)" >&2
+    __echo_ng "$desc"
     return 1
   fi
+}
+
+## コマンドを実行してExit codeが0かどうかを判定する。
+assert_exec_ok() {
+  local desc="$1"
+  shift
+  local cmds="$@"
+
+  local ret
+  ${cmds[@]} >/dev/null
+  ret=$?
+  assert_eq "$desc" 0 "$ret"
+}
+
+## コマンドを実行してExit codeが0以外かどうかを判定する。
+assert_exec_ng() {
+  local desc="$1"
+  shift
+  local cmds="$@"
+
+  local ret
+  ${cmds[@]} >/dev/null
+  ret=$?
+  assert_eq "$desc" 1 "$ret"
 }
 
 ## start_test はassert_eqを呼び出すための準備をする。
@@ -86,9 +130,9 @@ end_test() {
 
   echo
   if [ "$FAILED_COUNT" -le 0 ]; then
-    echo -e "${PAD}$(green [SUCCESS]) [$TEST_COUNT] all tests are passed." >&2
+    __echo_success "[$TEST_COUNT] all tests are passed."
   else
-    echo -e "${PAD}$(red [FAILURE]) [$FAILED_COUNT/$TEST_COUNT] tests are failed." >&2
+    __echo_failure "[$FAILED_COUNT/$TEST_COUNT] tests are failed."
     exit_code=1
   fi
   echo
