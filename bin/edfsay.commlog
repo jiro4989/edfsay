@@ -78,6 +78,7 @@ Options:
         --sd           echo-sdを使う
     -n, --linecount    何行出力するか [default: 1]
     -g, --genres       検索ワード一覧を出力する
+    -N, --noedf        EDF隊員を出力しない
 EOS
 }
 
