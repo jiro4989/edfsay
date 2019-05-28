@@ -42,21 +42,15 @@ main() {
 
 usage() {
   cat << EOS
-$SCRIPT_NAME はEDFのセリフを出力する。
+$SCRIPT_NAME はEDFのセリフを出力するコマンド集を管理する。
 
 Usage:
-    $(get_usage_section Usage $THIS_DIR/$SCRIPT_NAME.say -h)
-    $(get_usage_section Usage $THIS_DIR/$SCRIPT_NAME.words -h)
+$(get_usage_section Usage $THIS_DIR/$SCRIPT_NAME.say -h)
+$(get_usage_section Usage $THIS_DIR/$SCRIPT_NAME.words -h)
 
 Examples:
-    $SCRIPT_NAME
-    $SCRIPT_NAME chat yes
-    $SCRIPT_NAME chat angry
-    $SCRIPT_NAME commlog
-    $SCRIPT_NAME commlog 3
-    $SCRIPT_NAME commlog 4
-    $SCRIPT_NAME commlog 5
-    $SCRIPT_NAME commlog scientist
+$(get_usage_section Examples $THIS_DIR/$SCRIPT_NAME.say -h)
+$(get_usage_section Examples $THIS_DIR/$SCRIPT_NAME.words -h)
 
 Commands:
     say        $($THIS_DIR/$SCRIPT_NAME.say -h | head -n 1)
