@@ -1,41 +1,151 @@
 #!/bin/bash
 
 readonly THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%N}}")"; pwd)"
-SCRIPT_NAME=edfsay
+readonly SCRIPT_NAME=edfsay
 readonly VERSION=v1.0.0
+readonly RESOURCE_DIR=${RESOURCE_DIR:-/usr/local/etc/edfsay}
+readonly ART_FILE=$RESOURCE_DIR/ranger.txt
 
 main() {
-  local cmd=$1
-  shift
-  case "$cmd" in
-    chat|commlog)
-      : 何もしない
-      ;;
+  local say_edf=false
+  local use_stdin=false
+  local msg_type=""
+  local line_count=0
+  local msg_genre=""
+  local use_echosd=false
+  local msg=""
 
-    '-h'|'--help')
-      usage
-      return 0
-      ;;
+  while (( 0 < $# )); do
+    local opt=$1
+    shift
 
-    '-v'|'--version')
-      echo $VERSION
-      return 0
-      ;;
+    case "$opt" in
+      -h|--help)
+        usage
+        return 0
+        ;;
 
-    '--edf')
-      # TODO
-      return 0
-      ;;
+      -v|--version)
+        echo $VERSION
+        return 0
+        ;;
 
-    *)
-      echo 不正
-      return 1
+      --edf)
+        say_edf=true
+        ;;
+
+      -i|--stdin)
+        use_stdin=true
+        ;;
+
+      -t|--type)
+        msg_type="$1"
+        shift
+        if [[ ! "$msg_type" =~ ^(chat|commlog)$ ]]; then
+          usage
+          return 1
+        fi
+        ;;
+
+      -g|--genre)
+        msg_genre="$(make_or_match_regexp "$1")"
+        shift
+        ;;
+
+      --sd)
+        use_echosd=true
+        ;;
+
+      -G|--genres)
+        print_genres "$1"
+        return $?
+        ;;
+
+      *)
+        msg="$msg$opt"
+        ;;
+    esac
+  done
+
+  case "$msg_type" in
+    chat)
+      local file="$RESOURCE_DIR/chat.txt"
+      msg="$(get_msgs "$msg_genre" "$line_count" "$file")"
+      ;;
+    commlog)
+      local file="$RESOURCE_DIR/commlog.txt"
+      msg="$(get_msgs "$msg_genre" "$line_count" "$file")"
       ;;
   esac
 
-  local script_name="$SCRIPT_NAME"
-  export SCRIPT_NAME="$SCRIPT_NAME $cmd"
-  "$THIS_DIR/$script_name.$cmd" ${1+"$@"}
+  say "$ART_FILE" "$msg"
+}
+
+## 文章ファイルをからテキストをランダムに取得して叫ぶ。
+say() {
+  local art_file=$1
+  local msg=$2
+
+  wrap_quotes "$msg"
+  cat "$art_file"
+}
+
+# セリフを吹き出しで囲う。
+wrap_quotes() {
+  echo $1
+}
+
+# カンマ区切りからORマッチの正規表現文字列を生成する。
+make_or_match_regexp() {
+  local word="$1"
+
+  echo "$word" \
+    | tr ',' '|' \
+    | sed -E 's/.*/(&)/'
+}
+
+print_genres() {
+  local genre_type="$1"
+
+  local msg_genre="$(echo "$genre_type" | cut -d : -f 1)"
+  local line_count="$(echo "$genre_type" | cut -d : -f 2)"
+  local file="$RESOURCE_DIR/$msg_genre.txt"
+
+  if [ "$msg_genre" = "$line_count" ]; then
+    get_genres "$file"
+    return
+  fi
+
+  if [[ ! "$msg_genre" =~ ^(chat|commlog)$ ]] || [[ ! "$line_count" =~ ^[0-9]+$ ]]; then
+    usage
+    return 1
+  fi
+  get_genres "$file" \
+    | shuf \
+    | head -n "$line_count"
+}
+
+get_genres() {
+  local files="$@"
+
+  grep -vEe "^\s*#" -e "^$" "$files" \
+    | awk '1<NR' \
+    | cut -d , -f 1 \
+    | sort \
+    | uniq
+}
+
+get_msgs() {
+  local chat_genre=$1
+  local line_count=$2
+  shift 2
+  local files="$@"
+
+  grep -vEe "^\s*#" -e "^$" "$files" \
+    | awk '1<NR' \
+    | awk -F , '$1~/'"$chat_genre"'/{print $2}' \
+    | shuf \
+    | head -n $line_count
 }
 
 usage() {
@@ -46,16 +156,18 @@ Usage:
     $SCRIPT_NAME [options] [messages...]
 
 Options:
-    -h, --help            このヘルプを出力する
-    -v, --version         バージョン情報を出力する
-        --edf             EDF! EDF!!
-    -t, --type <type>     実際のEDF隊員の発言を出力する [type | commlog]
-    -n, --linecount       何行出力するか [default: 1]
-                          typeオプションと合わせて使う。
-    -g, --genre <genre>   EDF隊員の発言を分類で絞り込む
-                          typeオプションと合わせて使う。
-                          分類は[yes | no | TODO]
-        --sd              echo-sdを使う
+    -h, --help                このヘルプを出力する
+    -v, --version             バージョン情報を出力する
+        --edf                 EDF! EDF!!
+    -i, --stdin               標準入力を叫ぶ
+    -t, --type <type>         実際のEDF隊員の発言を出力する [type | commlog]
+    -g, --genre <genre>       EDF隊員の発言を分類で絞り込む
+                              typeオプションと合わせて使う。
+                              分類は[yes | no | TODO]
+        --sd                  echo-sdを使う
+    -G, --genres <type:num>   検索ワード一覧を出力する
+    -a, --ansi                ANSIカラーのEDF隊員を出力する
+    -N, --noedf               EDF隊員を出力しない
 EOS
 }
 
