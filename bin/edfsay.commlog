@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -eu
+
+main() {
+
+}
+
+usage() {
+
+}
+
+main ${1+"$@"}

@@ -1,0 +1,32 @@
+#!/bin/bash
+
+## 文章ファイルをからテキストをランダムに取得して叫ぶ。
+say() {
+  local chat_genre=$1
+  local line_count=$2
+  shift 2
+  local chat_files="$@"
+
+  grep -vEe "^\s*#" -e "^$" "$chat_files" \
+    | tail +2 \
+    | awk -F , '$1~/'"$chat_genre"'/{print $2}' \
+    | shuf \
+    | head -n $line_count
+}
+
+get_genre_regexp() {
+  local file=$1
+  tail +2 "$file" \
+    | cut -d , -f 1 \
+    | sort \
+    | uniq \
+    | tr '\n' '|' \
+    | sed -Ee 's/.$//' -e 's/.*/(&)/'
+}
+
+make_or_match_regexp() {
+  local words="$@"
+  echo "${words[@]}" \
+    | tr ' ' '|' \
+    | sed -E 's/.*/(&)/'
+}
