@@ -14,7 +14,7 @@ main() {
       return 1
       ;;
 
-    '-h'|'--help')
+    '-h'|'--help'|'')
       usage
       return 0
       ;;

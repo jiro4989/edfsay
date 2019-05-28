@@ -1,5 +1,7 @@
 = edfsay
 
+image:https://travis-ci.org/jiro4989/edfsay.svg?branch=master["Build Status", link="https://travis-ci.org/jiro4989/edfsay"]
+
 edfsayはEDF隊員がセリフを発するコマンド集です。
 `cowsay` コマンドに影響を受けました。
 

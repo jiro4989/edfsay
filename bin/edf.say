@@ -46,7 +46,7 @@ main() {
     msg="EDF! EDF!!"
   fi
 
-  say "$ART_FILE" "$msg"
+  _say "$ART_FILE" "$msg"
 }
 
 usage() {
@@ -69,6 +69,32 @@ Options:
     -N, --noedf        EDF隊員を出力しない
         --ansi         ANSIレンジャーを出力する
 EOS
+}
+
+## 文章ファイルをからテキストをランダムに取得して叫ぶ。
+_say() {
+  local art_file="$1"
+  shift
+  local msg="$@"
+  _wrap_quotes "$msg"
+  cat "$art_file"
+}
+
+# セリフを吹き出しで囲う。
+_wrap_quotes() {
+  local msg="$1"
+  msg="$(echo "$msg" | sed 'y/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?-= |~@./ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９！？ー＝　｜〜＠・/')"
+  local i=1
+  echo " _____________________________________________________________________"
+  echo "|                                                                     |"
+  (
+  n="$(echo "$msg" | wc -l)"
+  pad="$(seq $((30 - (30 % n))) | xargs -I@ bash -c 'echo -n "　"')"
+  echo "$msg$pad" | grep -o ..............................
+  ) | sed -E 's/.*/|    &     |/g'
+  echo "|                                                                     |"
+  echo "|_________________________________________  __________________________|"
+  echo "                                          |/                           "
 }
 
 main ${1+"$@"}

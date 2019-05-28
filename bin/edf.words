@@ -28,13 +28,8 @@ main() {
         return 0
         ;;
 
-      # '-t'|'--types')
-      #   get_types "$RESOURCE_FILE"
-      #   return 0
-      #   ;;
-
       '-g'|'--genres')
-        get_genres "$RESOURCE_FILE"
+        _get_genres "$RESOURCE_FILE"
         return 0
         ;;
 
@@ -57,11 +52,11 @@ main() {
     esac
   done
 
-  local regexp="$(make_or_match_regexp ${search_genres[@]})"
+  local regexp="$(_make_or_match_regexp ${search_genres[@]})"
   if [ "$print_all" = true ]; then
-    get_msgs "" "$regexp" "$RESOURCE_FILE"
+    _get_msgs "" "$regexp" "$RESOURCE_FILE"
   else
-    get_msgs "" "$regexp" "$RESOURCE_FILE" \
+    _get_msgs "" "$regexp" "$RESOURCE_FILE" \
       | shuf \
       | head -n "$line_count"
   fi
@@ -89,6 +84,45 @@ Options:
     -n, --linecount    何行出力するか [default: 1]
     -a, --all          全部出力する
 EOS
+}
+
+# メッセージテキストファイルのメッセージをジャンルで絞り込んで返す。
+_get_msgs() {
+  local regexp1=$1
+  local regexp2=$2
+  shift 2
+  local files="$@"
+  grep -vEe "^\s*#" -e "^$" "$files" \
+    | awk '1<NR' \
+    | awk -F , '$1~/'"$regexp1"'/{print}' \
+    | awk -F , '$2~/'"$regexp2"'/{print $3}'
+}
+
+# 列でデータを取得する。
+_get_fields() {
+  local field="$1"
+  shift
+  local files="$@"
+
+  grep -vEe "^\s*#" -e "^$" "$files" \
+    | awk '1<NR' \
+    | cut -d , -f "$field" \
+    | sort \
+    | uniq
+}
+
+# データベースのgenre一覧を取得する
+_get_genres() {
+  _get_fields 2 "$@"
+}
+
+# 渡された引数から正規表現のORマッチ文字列を生成する。
+_make_or_match_regexp() {
+  local words="$@"
+
+  echo "${words[@]}" \
+    | tr ' ' '|' \
+    | sed -E 's/.*/(&)/'
 }
 
 main ${1+"$@"}
