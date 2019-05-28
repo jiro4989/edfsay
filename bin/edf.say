@@ -67,7 +67,7 @@ Options:
     -i, --stdin        標準入力を受け付ける
         --sd           echo-sdを使う
     -N, --noedf        EDF隊員を出力しない
-        --edf          EDF! EDF!!
+        --ansi         ANSIレンジャーを出力する
 EOS
 }
 
