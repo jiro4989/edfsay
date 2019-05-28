@@ -4,14 +4,28 @@
 say() {
   local chat_genre=$1
   local line_count=$2
-  shift 2
+  local art_file=$3
+  shift 3
   local chat_files="$@"
 
-  grep -vEe "^\s*#" -e "^$" "$chat_files" \
-    | tail +2 \
-    | awk -F , '$1~/'"$chat_genre"'/{print $2}' \
-    | shuf \
-    | head -n $line_count
+  (
+    echo "   ________________________________________________   "
+    echo "  |                                                |  "
+    grep -vEe "^\s*#" -e "^$" "$chat_files" \
+      | tail +2 \
+      | awk -F , '$1~/'"$chat_genre"'/{print $2}' \
+      | shuf \
+      | head -n $line_count \
+      | sed -E 's@.*@\x1b[1m&\x1b[m@'
+    echo "  |                                                |  "
+    echo "  |________________________________________________|  "
+  ) | sed -E 's@.*@\x1b[48;5;231m&\x1b[m@g'
+  cat "$art_file"
+}
+
+# セリフを吹き出しで囲う。
+wrap_quotes() {
+  :
 }
 
 get_genres() {
