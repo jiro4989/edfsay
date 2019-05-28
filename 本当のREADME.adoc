@@ -67,3 +67,18 @@ $ edf words yes angry -n 10
                           ,MMHHHkWpWWHWV<.`  dH!
                            TMNHqqHWHWHWkwz;_!(`
 ----
+
+== 開発
+
+EDF wikiからチャット定型文と通信記録とかをスクレイピングしてくる。
+
+[source,bash]
+----
+./scrape_chat.sh
+----
+
+[source,bash]
+----
+sudo pip3 install beautifulsoup4
+./scrape_commlog.py
+----
