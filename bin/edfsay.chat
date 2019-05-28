@@ -3,9 +3,9 @@
 readonly THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%N}}")"; pwd)"
 source "$THIS_DIR/edfsay.functions"
 
-SCRIPT_NAME=${SCRIPT_NAME:-edfsay.chat}
+readonly SCRIPT_NAME=${SCRIPT_NAME:=edfsay.chat}
 readonly VERSION=v1.0.0
-RESOURCE_DIR=${RESOURCE_DIR:-/usr/local/etc/edfsay}
+readonly RESOURCE_DIR=${RESOURCE_DIR:-/usr/local/etc/edfsay}
 readonly RESOURCE_FILE=$RESOURCE_DIR/chat.txt
 
 main() {

@@ -1,132 +1,57 @@
 #!/bin/bash
 
-# 名言: https://www2.atwiki.jp/edf41/pages/91.html
-#       https://www65.atwiki.jp/edf5/pages/164.html
-# チャット: https://www65.atwiki.jp/edf5/pages/148.html
-
+readonly THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%N}}")"; pwd)"
+SCRIPT_NAME=edfsay
 readonly VERSION=v1.0.0
-readonly RESOURCE_DIR=/usr/local/etc/edfsay
 
 main() {
-  local sub_cmd=""
-  local print_all=false
-  local use_echosd=false
-  local scientist_say=false
-  local chat_genre=""
-  local commlog_genre=""
-  local line_count=1
-
-  while (( 0 < $# )); do
-    local opt=$1
-    shift
-
-    case "$opt" in
-      '-h'|'--help')
-        usage
-        return 0
-        ;;
-
-      '-v'|'--version')
-        echo $VERSION
-        return 0
-        ;;
-
-      '-a'|'--all')
-        print_all=true
-        ;;
-
-      '--sd')
-        use_echosd=true
-        ;;
-
-      '-s'|"--scientist")
-        scientist_say=true
-        ;;
-
-      '-n'|'--linecount')
-        line_count=$1
-        shift
-        if [[ ! "$line_count" =~ ^[0-9]+$ ]]; then
-          usage
-          return 1
-        fi
-        ;;
-
-      chat)
-        sub_cmd=$opt
-        chat_genre=$1
-        shift
-        if [[ ! "$chat_genre" =~ $(get_genre_regexp $RESOURCE_DIR/chat.txt) ]] && [[ ! "$chat_genre" = "" ]]; then
-          usage
-          return 1
-        fi
-        ;;
-
-      commlog)
-        sub_cmd=$opt
-        commlog_genre=$1
-        shift
-        if [[ ! "$commlog_genre" =~ $(get_genre_regexp $RESOURCE_DIR/commlog.txt) ]] && [[ ! "$commlog_genre" = "" ]]; then
-          usage
-          return 1
-        fi
-        ;;
-
-      *)
-        usage
-        return 1
-        ;;
-    esac
-  done
-
-  case "$sub_cmd" in
-    chat)
-      say "$RESOURCE_DIR/chat.txt" "$chat_genre" "$line_count"
+  local cmd=$1
+  shift
+  case "$cmd" in
+    chat|commlog)
+      : 何もしない
       ;;
-    commlog)
-      say "$RESOURCE_DIR/commlog.txt" "$commlog_genre" "$line_count"
+
+    '-h'|'--help')
+      usage
+      return 0
       ;;
-    "")
+
+    '-v'|'--version')
+      echo $VERSION
+      return 0
+      ;;
+
+    *)
+      echo 不正
+      return 1
       ;;
   esac
-}
 
-## チャット定型文を返す。
-say() {
-  local chat_file=$1
-  local chat_genre=$2
-  local line_count=$3
-  grep -vEe "^\s*#" -e "^$" $chat_file \
-    | tail +2 \
-    | awk -F , '$1~/'"$chat_genre"'/{print $2}' \
-    | shuf \
-    | head -n $line_count
-}
-
-get_genre_regexp() {
-  local chat_file=$1
-  tail +2 "$chat_file" | cut -d , -f 1 | sort | uniq | tr '\n' '|' | sed -E 's/.*/(&)/'
+  local script_name="$SCRIPT_NAME"
+  export SCRIPT_NAME="$SCRIPT_NAME $cmd"
+  "$THIS_DIR/$script_name.$cmd" ${1+"$@"}
 }
 
 usage() {
   cat << EOS
-edfsay is command that EDF says a message.
+$SCRIPT_NAME is command that EDF says a message.
 
 Usage:
-    edfsay [options]
-    edfsay commlog [options]
-    edfsay commlog [options] (2 | 3 | 4 | 5 | scientist)
-    edfsay chat [options]
+    $SCRIPT_NAME [options]
+    $SCRIPT_NAME commlog [options]
+    $SCRIPT_NAME commlog [options] (2 | 3 | 4 | 5 | scientist)
+    $SCRIPT_NAME chat [options]
 
 Examples:
-    edfsay
-    edfsay chat yes
-    edfsay chat angry
-    edfsay commlog
-    edfsay commlog 3
-    edfsay commlog 4
-    edfsay commlog 5
-    edfsay commlog scientist
+    $SCRIPT_NAME
+    $SCRIPT_NAME chat yes
+    $SCRIPT_NAME chat angry
+    $SCRIPT_NAME commlog
+    $SCRIPT_NAME commlog 3
+    $SCRIPT_NAME commlog 4
+    $SCRIPT_NAME commlog 5
+    $SCRIPT_NAME commlog scientist
 
 Commands:
     chat       チャット定型文から任意の数セリフを発する
@@ -142,4 +67,3 @@ EOS
 }
 
 main ${1+"$@"}
-exit $?
