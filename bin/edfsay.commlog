@@ -1,13 +1,78 @@
 #!/bin/bash
 
-set -eu
+readonly THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%N}}")"; pwd)"
+source "$THIS_DIR/edfsay.functions"
+
+readonly SCRIPT_NAME=${SCRIPT_NAME:=edfsay.commlog}
+readonly VERSION=v1.0.0
+readonly RESOURCE_DIR=${RESOURCE_DIR:-/usr/local/etc/edfsay}
+readonly RESOURCE_FILE=$RESOURCE_DIR/commlog.txt
 
 main() {
+  local print_all=false
+  local use_echosd=false
+  local line_count=1
+  local search_genres=()
 
+  while (( 0 < $# )); do
+    local opt=$1
+    shift
+
+    case "$opt" in
+      '-h'|'--help')
+        usage
+        return 0
+        ;;
+
+      '-v'|'--version')
+        echo $VERSION
+        return 0
+        ;;
+
+      '--sd')
+        use_echosd=true
+        ;;
+
+      '-n'|'--linecount')
+        line_count=$1
+        shift
+        if [[ ! "$line_count" =~ ^[0-9]+$ ]]; then
+          usage
+          return 1
+        fi
+        ;;
+
+      *)
+        search_genres+=("$opt")
+        ;;
+    esac
+  done
+
+  local search_genre="$(make_or_match_regexp ${search_genres[@]})"
+
+  say "$search_genre" "$line_count" "$RESOURCE_FILE"
 }
 
 usage() {
+  cat << EOS
+$SCRIPT_NAME says chat messages.
 
+Usage:
+    $SCRIPT_NAME [options] <genre...>
+
+Examples:
+    $SCRIPT_NAME -h
+    $SCRIPT_NAME -v
+    $SCRIPT_NAME
+    $SCRIPT_NAME 5
+    $SCRIPT_NAME scientist -n 5
+
+Options:
+    -h, --help         このヘルプを出力する
+    -v, --version      バージョン情報を出力する
+        --sd           echo-sdを使う
+    -n, --linecount    何行出力するか [default: 1]
+EOS
 }
 
 main ${1+"$@"}
