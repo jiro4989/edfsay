@@ -28,10 +28,10 @@ main() {
         return 0
         ;;
 
-      '-t'|'--types')
-        get_types "$RESOURCE_FILE"
-        return 0
-        ;;
+      # '-t'|'--types')
+      #   get_types "$RESOURCE_FILE"
+      #   return 0
+      #   ;;
 
       '-g'|'--genres')
         get_genres "$RESOURCE_FILE"
@@ -85,7 +85,6 @@ Examples:
 Options:
     -h, --help         このヘルプを出力する
     -v, --version      バージョン情報を出力する
-    -t, --types        大分類を一覧を出力する
     -g, --genres       小分類一覧を出力する
     -n, --linecount    何行出力するか [default: 1]
     -a, --all          全部出力する

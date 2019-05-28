@@ -18,10 +18,9 @@ EDF! EDF!!
 
 [source,bash]
 ----
-$ edfsay "EDF! EDF!!"
-$ edfsay --edf
-$ edfsay -h
-$ edfsay --random
-$ edfsay --type chat -n 1 --genre yes,no,scream
-$ edfsay -t commlog -n 5 -g scientist
+$ edf say
+$ edf say "主砲がきかにゃい！？"
+$ edf say --edf
+$ edf -h
+$ edf words yes angry -n 10
 ----

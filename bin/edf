@@ -65,9 +65,6 @@ Commands:
 Options:
     -h, --help          このヘルプを出力する
     -v, --version       バージョン情報を出力する
-        --sd            echo-sdを使う
-    -n, --linecount     何行出力するか [default: 1]
-        --edf           EDF! EDF!!
 EOS
 }
 
