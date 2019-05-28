@@ -64,6 +64,7 @@ Examples:
 Options:
     -h, --help         このヘルプを出力する
     -v, --version      バージョン情報を出力する
+    -i, --stdin        標準入力を受け付ける
         --sd           echo-sdを使う
     -N, --noedf        EDF隊員を出力しない
         --edf          EDF! EDF!!
