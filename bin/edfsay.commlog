@@ -29,6 +29,11 @@ main() {
         return 0
         ;;
 
+      '-g'|'--genres')
+        get_genres "$RESOURCE_FILE"
+        return 0
+        ;;
+
       '--sd')
         use_echosd=true
         ;;
@@ -72,6 +77,7 @@ Options:
     -v, --version      バージョン情報を出力する
         --sd           echo-sdを使う
     -n, --linecount    何行出力するか [default: 1]
+    -g, --genres       検索ワード一覧を出力する
 EOS
 }
 

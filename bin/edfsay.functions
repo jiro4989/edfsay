@@ -14,18 +14,19 @@ say() {
     | head -n $line_count
 }
 
-get_genre_regexp() {
-  local file=$1
-  tail +2 "$file" \
+get_genres() {
+  local files="$@"
+
+  grep -vEe "^\s*#" -e "^$" "$files" \
+    | tail +2 \
     | cut -d , -f 1 \
     | sort \
-    | uniq \
-    | tr '\n' '|' \
-    | sed -Ee 's/.$//' -e 's/.*/(&)/'
+    | uniq
 }
 
 make_or_match_regexp() {
   local words="$@"
+
   echo "${words[@]}" \
     | tr ' ' '|' \
     | sed -E 's/.*/(&)/'
