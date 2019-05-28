@@ -72,7 +72,7 @@ usage() {
 $SCRIPT_NAME はEDFのチャット定型文をランダムに出力する。
 
 Usage:
-    $SCRIPT_NAME [options] [search_word]
+    $SCRIPT_NAME [options] [search_word...]
 
 Examples:
     $SCRIPT_NAME

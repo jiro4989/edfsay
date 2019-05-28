@@ -1,6 +1,6 @@
 = edfsay
 
-edfsayはEDF隊員がセリフを発するコマンドです。
+edfsayはEDF隊員がセリフを発するコマンド集です。
 `cowsay` コマンドに影響を受けました。
 
 EDF! EDF!!

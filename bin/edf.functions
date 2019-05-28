@@ -12,7 +12,7 @@ say() {
 # セリフを吹き出しで囲う。
 wrap_quotes() {
   local msg="$1"
-  msg="$(echo "$msg" | sed 'y/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?-= /ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ０１２３４５６７８９！？ー＝　/')"
+  msg="$(echo "$msg" | sed 'y/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?-= |~@/ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９！？ー＝　｜〜＠/')"
   local i=1
   echo " _____________________________________________________________________"
   echo "|                                                                     |"
@@ -67,8 +67,15 @@ make_or_match_regexp() {
     | sed -E 's/.*/(&)/'
 }
 
-get_usage() {
-  :
+get_usage_section() {
+  local section="$1"
+  shift
+  $@ | awk '
+{
+  if ($1=="'"$section"':") { section_flag=true; }
+  if (section_flag) {print $0}
+  if (section_flag && $1 == "") {print $0}
+}'
 }
 
 get_examples() {

@@ -1,6 +1,8 @@
 #!/bin/bash
 
 readonly THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%N}}")"; pwd)"
+source "$THIS_DIR/edf.functions"
+
 SCRIPT_NAME=edf
 readonly VERSION=v1.0.0
 
@@ -43,10 +45,8 @@ usage() {
 $SCRIPT_NAME はEDFのセリフを出力する。
 
 Usage:
-    $SCRIPT_NAME [options]
-    $SCRIPT_NAME commlog [options]
-    $SCRIPT_NAME commlog [options] (2 | 3 | 4 | 5 | scientist)
-    $SCRIPT_NAME chat [options]
+    $(get_usage_section Usage $THIS_DIR/$SCRIPT_NAME.say -h)
+    $(get_usage_section Usage $THIS_DIR/$SCRIPT_NAME.words -h)
 
 Examples:
     $SCRIPT_NAME
@@ -60,7 +60,7 @@ Examples:
 
 Commands:
     say        $($THIS_DIR/$SCRIPT_NAME.say -h | head -n 1)
-    commlog    $($THIS_DIR/$SCRIPT_NAME.words -h | head -n 1)
+    words      $($THIS_DIR/$SCRIPT_NAME.words -h | head -n 1)
 
 Options:
     -h, --help          このヘルプを出力する
