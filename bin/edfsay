@@ -35,7 +35,7 @@ main() {
 
 usage() {
   cat << EOS
-$SCRIPT_NAME is command that EDF says a message.
+$SCRIPT_NAME はEDFのセリフを出力する。
 
 Usage:
     $SCRIPT_NAME [options]
@@ -54,8 +54,8 @@ Examples:
     $SCRIPT_NAME commlog scientist
 
 Commands:
-    chat       チャット定型文から任意の数セリフを発する
-    commlog    通信記録から任意の数セリフを発する
+    chat       $($THIS_DIR/$SCRIPT_NAME.chat -h | head -n 1)
+    commlog    $($THIS_DIR/$SCRIPT_NAME.commlog -h | head -n 1)
 
 Options:
     -h, --help          このヘルプを出力する

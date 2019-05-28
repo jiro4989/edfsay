@@ -59,7 +59,7 @@ main() {
 
 usage() {
   cat << EOS
-$SCRIPT_NAME says chat messages.
+$SCRIPT_NAME はEDFのチャット定型文をランダムに出力する。
 
 Usage:
     $SCRIPT_NAME [options] <genre...>

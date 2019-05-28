@@ -31,3 +31,16 @@ make_or_match_regexp() {
     | tr ' ' '|' \
     | sed -E 's/.*/(&)/'
 }
+
+get_usage() {
+  :
+}
+
+get_examples() {
+  :
+}
+
+get_short_description() {
+  :
+}
+
