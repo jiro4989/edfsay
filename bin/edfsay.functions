@@ -32,7 +32,7 @@ get_genres() {
   local files="$@"
 
   grep -vEe "^\s*#" -e "^$" "$files" \
-    | tail +2 \
+    | awk '1<NR' \
     | cut -d , -f 1 \
     | sort \
     | uniq
