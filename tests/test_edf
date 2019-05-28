@@ -11,6 +11,8 @@ assert_exec_ok "ヘルプメッセージが出力できる(-h)" $CMD -h
 assert_exec_ok "ヘルプメッセージが出力できる(--help)" $CMD --help
 assert_exec_ok "バージョン情報が出力できる(-v)" $CMD -v
 assert_exec_ok "バージョン情報が出力できる(--version)" $CMD --version
+assert_exec_ok "sayサブコマンドを呼び出せる" $CMD say
+assert_exec_ok "sayサブコマンドを呼び出せる(ヘルプ)" $CMD say -h
 assert_exec_ok "wordsサブコマンドを呼び出せる" $CMD words
 assert_exec_ok "wordsサブコマンドを呼び出せる(ヘルプ)" $CMD words -h
 assert_exec_ng "存在しないサブコマンドを指定したときは異常出力する" $CMD hoge
