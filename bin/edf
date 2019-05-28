@@ -4,13 +4,14 @@ readonly THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%N}}")"; pwd)"
 SCRIPT_NAME=edf
 readonly VERSION=v1.0.0
 readonly FUNCTION_FILE="$THIS_DIR/$SCRIPT_NAME.functions"
+source "$FUNCTION_FILE"
 
 main() {
   local cmd=$1
   shift
   case "$cmd" in
     functions)
-      echo functions は内部用ライブラリのため使用できない
+      err "$cmd: 内部用ライブラリのため指定できない"
       return 1
       ;;
 
@@ -29,7 +30,7 @@ main() {
       type "$THIS_DIR/edf.$cmd" >/dev/null 2>&1
       ret=$?
       if [ "$ret" -ne 0 ]; then
-        echo 不正
+        err "$cmd: 不正なサブコマンド指定です"
         return 1
       fi
       ;;
@@ -44,12 +45,11 @@ usage() {
   cat << EOS
 $SCRIPT_NAME はEDFのセリフを出力するコマンド集を管理する。
 
-$(__get_usage_sections Usage:)
+$(_get_usage_sections Usage:)
 
-$(__get_usage_sections Examples:)
+$(_get_usage_sections Examples:)
 
-Commands:
-$(__get_usage_short_descriptions)
+$(_get_usage_short_descriptions)
 
 Options:
     -h, --help          このヘルプを出力する
@@ -57,17 +57,17 @@ Options:
 EOS
 }
 
-__get_usage_sections() {
+_get_usage_sections() {
   local section_title="$1"
   echo "$section_title"
   for cmd in $THIS_DIR/$SCRIPT_NAME.*; do
     if [ ! "$cmd" = "$FUNCTION_FILE" ]; then
-      __get_usage_section "$section_title" "$cmd" -h
+      _get_usage_section "$section_title" "$cmd" -h
     fi
   done
 }
 
-__get_usage_section() {
+_get_usage_section() {
   local section="$1"
   shift
   $@ | awk '
@@ -78,7 +78,8 @@ __get_usage_section() {
 }' | sed 's/\./ /'
 }
 
-__get_usage_short_descriptions() {
+_get_usage_short_descriptions() {
+  echo "Commands:"
   for cmd in $THIS_DIR/$SCRIPT_NAME.*; do
     if [ ! "$cmd" = "$FUNCTION_FILE" ]; then
       printf "    $("$cmd" -h | head -n 1)" | sed 's/\./ /'

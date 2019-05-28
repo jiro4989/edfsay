@@ -5,7 +5,7 @@ source "$THIS_DIR/edf.functions"
 
 readonly SCRIPT_NAME="$(get_script_name)"
 readonly VERSION=v1.0.0
-readonly RESOURCE_DIR=${RESOURCE_DIR:-/usr/local/etc/edfsay}
+readonly RESOURCE_DIR=${RESOURCE_DIR:-$THIS_DIR/../etc/edfsay}
 readonly ART_FILE=$RESOURCE_DIR/ranger.txt
 
 main() {

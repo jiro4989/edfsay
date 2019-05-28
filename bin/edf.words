@@ -5,7 +5,7 @@ source "$THIS_DIR/edf.functions"
 
 readonly SCRIPT_NAME="$(get_script_name)"
 readonly VERSION=v1.0.0
-readonly RESOURCE_DIR=${RESOURCE_DIR:-/usr/local/etc/edfsay}
+readonly RESOURCE_DIR=${RESOURCE_DIR:-$THIS_DIR/../etc/edfsay}
 readonly RESOURCE_FILE=$RESOURCE_DIR/words.txt
 
 main() {
@@ -37,7 +37,7 @@ main() {
         line_count=$1
         shift
         if [[ ! "$line_count" =~ ^[0-9]+$ ]]; then
-          usage
+          err "$line_count: 不正な数値指定です"
           return 1
         fi
         ;;
