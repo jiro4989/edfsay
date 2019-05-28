@@ -3,7 +3,7 @@
 readonly THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%N}}")"; pwd)"
 source "$THIS_DIR/edf.functions"
 
-readonly SCRIPT_NAME=${SCRIPT_NAME:=edf.say}
+readonly SCRIPT_NAME="$(get_script_name)"
 readonly VERSION=v1.0.0
 readonly RESOURCE_DIR=${RESOURCE_DIR:-/usr/local/etc/edfsay}
 readonly ART_FILE=$RESOURCE_DIR/ranger.txt

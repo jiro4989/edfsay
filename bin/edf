@@ -9,8 +9,9 @@ main() {
   local cmd=$1
   shift
   case "$cmd" in
-    say|words)
-      : 何もしない
+    functions)
+      echo functions は内部用ライブラリのため使用できない
+      return 1
       ;;
 
     '-h'|'--help')
@@ -24,8 +25,13 @@ main() {
       ;;
 
     *)
-      echo 不正
-      return 1
+      local ret
+      type edf.$cmd >/dev/null 2>&1
+      ret=$?
+      if [ "$ret" -ne 0 ]; then
+        echo 不正
+        return 1
+      fi
       ;;
   esac
 

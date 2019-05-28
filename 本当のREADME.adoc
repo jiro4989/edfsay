@@ -5,9 +5,20 @@ edfsayはEDF隊員がセリフを発するコマンド集です。
 
 EDF! EDF!!
 
+== コマンド
+
+.コマンド一覧
+[options="header"]
+|==================================================================
+|edf           |edf.\*の各種コマンドを統括する親コマンド
+|edf.say       |EDF隊員がセリフを発する
+|edf.words     |EDF隊員のセリフを出力する
+|edf.functions |edf.*コマンドが使用するライブラリ。コマンドではない
+|==================================================================
+
 == インストール
 
-以下のコマンドでインストールできるはず。
+以下のコマンドでインストールできる。
 
 [source,bash]
 ----
@@ -16,14 +27,7 @@ EDF! EDF!!
 
 == 使い方
 
-[source,bash]
-----
-$ edf say
-$ edf say "主砲がきかにゃい！？"
-$ edf say --edf
-$ edf -h
-$ edf words yes angry -n 10
-----
+`edf say` はEDF隊員がセリフを発します。
 
 [source,bash]
 ----
@@ -66,6 +70,63 @@ $ edf words yes angry -n 10
                           dMMW@MMMHWMHk77?` _Hd)
                           ,MMHHHkWpWWHWV<.`  dH!
                            TMNHqqHWHWHWkwz;_!(`
+----
+
+`edf words` はEDF隊員や国営放送などゲーム内に登場したセリフをランダムに出力しま
+す。
+
+[source,bash]
+----
+$ edf words yes -n 5
+かまわん
+問題ない
+わかった
+絶対だ
+よかろう
+
+$ edf words scientist
+蒸発させてあげる。
+----
+
+== 実装
+
+`edfsay` のコマンドは `edf` コマンドを始めとする複数のコマンドで構成されている。
+`edf` コマンドはPATHの通った同じディレクトリ内に `edf.*` のコマンドが存在すると
+き、そのコマンドをサブコマンドとみなして扱おうとする。
+
+例えば/usr/local/binに以下のコマンドが存在する場合。
+
+* edf
+* edf.say
+* edf.words
+* edf.think
+
+このとき、 `edf` コマンドからは `edf say` と同様に `edf think` というサブコマン
+ドとして利用可能になる。また、 `edf -h` でのヘルプメッセージ出力も `edf.think
+-h` をもとに自動的に追加される。
+
+サブコマンドとして追加されるコマンドのヘルプの書式は以下のようでなければならない
+。
+
+[source,bash]
+----
+edf.*** はEDFのサブコマンドです。  <--- 1行のコマンド説明
+
+Usage:
+    edf.*** [options]    <--- Usage:から始まって空白行で終わるセクション
+    edf.*** -h                間に空白行が存在するとそこでセクションが終了したとみ
+                              なされる
+Examples:
+    edf.*** hogefuga 5   <--- Examples:から始まって空白行で終わるセクション
+    edf.*** -n 2              Usageと同様
+    edf.*** -X test
+
+Options:
+    -h, --help         このヘルプを出力する
+    -v, --version      バージョン情報を出力する
+
+# Optionsはなくても edf コマンドに影響はないが、edf.***コマンドは単体で動作可能
+# であるべきなので書いておくべきである
 ----
 
 == 開発

@@ -51,14 +51,17 @@ get_fields() {
     | uniq
 }
 
+# データベースのtype一覧を取得する
 get_types() {
   get_fields 1 "$@"
 }
 
+# データベースのgenre一覧を取得する
 get_genres() {
   get_fields 2 "$@"
 }
 
+# 渡された引数から正規表現のORマッチ文字列を生成する。
 make_or_match_regexp() {
   local words="$@"
 
@@ -67,3 +70,10 @@ make_or_match_regexp() {
     | sed -E 's/.*/(&)/'
 }
 
+# スクリプトの名前を取得する。
+# 取得する際に SCRIPT_NAME という変数がすでに定義されていた場合は定義済みの値を
+# セットする。
+get_script_name() {
+  local script_path=$0
+  echo ${SCRIPT_NAME:=$(basename "$script_path")}
+}
