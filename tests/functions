@@ -36,19 +36,19 @@ __color_echo() {
 }
 
 __echo_ok() {
-  __color_echo green OK $1
+  __color_echo green OK "$1"
 }
 
 __echo_ng() {
-  __color_echo red NG $1
+  __color_echo red NG "$1"
 }
 
 __echo_success() {
-  __color_echo green SUCCESS $1
+  __color_echo green SUCCESS "$1"
 }
 
 __echo_failure() {
-  __color_echo red FAILURE $1
+  __color_echo red FAILURE "$1"
 }
 
 ## assert_eq はexpectとgotの値の一致を検証する。
