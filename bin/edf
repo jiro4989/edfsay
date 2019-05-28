@@ -1,14 +1,14 @@
 #!/bin/bash
 
 readonly THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%N}}")"; pwd)"
-SCRIPT_NAME=edfsay
+SCRIPT_NAME=edf
 readonly VERSION=v1.0.0
 
 main() {
   local cmd=$1
   shift
   case "$cmd" in
-    chat|commlog)
+    say|words)
       : 何もしない
       ;;
 
@@ -59,8 +59,8 @@ Examples:
     $SCRIPT_NAME commlog scientist
 
 Commands:
-    chat       $($THIS_DIR/$SCRIPT_NAME.chat -h | head -n 1)
-    commlog    $($THIS_DIR/$SCRIPT_NAME.commlog -h | head -n 1)
+    say        $($THIS_DIR/$SCRIPT_NAME.say -h | head -n 1)
+    commlog    $($THIS_DIR/$SCRIPT_NAME.words -h | head -n 1)
 
 Options:
     -h, --help          このヘルプを出力する

@@ -2,19 +2,17 @@
 
 source functions
 
-readonly CMD=../bin/edfsay
+readonly CMD=../bin/edf
 export RESOURCE_DIR=../etc/edfsay
 
-start_test edfsay
+start_test edf
 
 assert_exec_ok "ヘルプメッセージが出力できる(-h)" $CMD -h
 assert_exec_ok "ヘルプメッセージが出力できる(--help)" $CMD --help
 assert_exec_ok "バージョン情報が出力できる(-v)" $CMD -v
 assert_exec_ok "バージョン情報が出力できる(--version)" $CMD --version
-assert_exec_ok "chatサブコマンドを呼び出せる" $CMD chat
-assert_exec_ok "chatサブコマンドを呼び出せる(ヘルプ)" $CMD chat -h
-assert_exec_ok "commlogサブコマンドを呼び出せる" $CMD commlog
-assert_exec_ok "commlogサブコマンドを呼び出せる(ヘルプ)" $CMD commlog -h
+assert_exec_ok "wordsサブコマンドを呼び出せる" $CMD words
+assert_exec_ok "wordsサブコマンドを呼び出せる(ヘルプ)" $CMD words -h
 assert_exec_ng "存在しないサブコマンドを指定したときは異常出力する" $CMD hoge
 assert_exec_ng "第一引数はヘルプでもバージョンでもない場合はサブコマンドである" $CMD hoge -h
 assert_exec_ok "第一引数がヘルプの場合は後続の引数は無視" $CMD -h hoge

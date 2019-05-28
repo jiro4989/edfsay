@@ -1,0 +1,72 @@
+#!/bin/bash
+
+readonly THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%N}}")"; pwd)"
+source "$THIS_DIR/edf.functions"
+
+readonly SCRIPT_NAME=${SCRIPT_NAME:=edf.say}
+readonly VERSION=v1.0.0
+readonly RESOURCE_DIR=${RESOURCE_DIR:-/usr/local/etc/edfsay}
+readonly ART_FILE=$RESOURCE_DIR/ranger.txt
+
+main() {
+  local use_echosd=false
+  local no_edf=false
+  local msg=""
+
+  while (( 0 < $# )); do
+    local opt=$1
+    shift
+
+    case "$opt" in
+      -h|--help)
+        usage
+        return 0
+        ;;
+
+      -v|--version)
+        echo $VERSION
+        return 0
+        ;;
+
+      --sd)
+        use_echosd=true
+        ;;
+
+      -N|--noedf)
+        no_edf=true
+        ;;
+
+      *)
+        msg+="$msg$opt"
+        ;;
+    esac
+  done
+
+  if [ "$msg" = "" ]; then
+    msg="EDF! EDF!!"
+  fi
+
+  say "$ART_FILE" "$msg"
+}
+
+usage() {
+  cat << EOS
+$SCRIPT_NAME はEDF隊員がセリフを発する。
+
+Usage:
+    $SCRIPT_NAME [options] [messages...]
+
+Examples:
+    $SCRIPT_NAME
+    $SCRIPT_NAME EDF! EDF!!
+    $SCRIPT_NAME --sd EDFは仲間を見捨てない。本当だな。
+
+Options:
+    -h, --help         このヘルプを出力する
+    -v, --version      バージョン情報を出力する
+        --sd           echo-sdを使う
+    -N, --noedf        EDF隊員を出力しない
+EOS
+}
+
+main ${1+"$@"}

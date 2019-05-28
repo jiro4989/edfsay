@@ -1,18 +1,17 @@
 #!/bin/bash
 
 readonly THIS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-${(%):-%N}}")"; pwd)"
-source "$THIS_DIR/edfsay.functions"
+source "$THIS_DIR/edf.functions"
 
-readonly SCRIPT_NAME=${SCRIPT_NAME:=edfsay.chat}
+readonly SCRIPT_NAME=${SCRIPT_NAME:=edf.words}
 readonly VERSION=v1.0.0
 readonly RESOURCE_DIR=${RESOURCE_DIR:-/usr/local/etc/edfsay}
-readonly RESOURCE_FILE=$RESOURCE_DIR/chat.txt
-readonly ART_FILE=$RESOURCE_DIR/ranger.txt
+readonly RESOURCE_FILE=$RESOURCE_DIR/words.txt
 
 main() {
-  local use_echosd=false
   local line_count=1
   local search_genres=()
+  local print_all=false
 
   while (( 0 < $# )); do
     local opt=$1
@@ -29,13 +28,14 @@ main() {
         return 0
         ;;
 
-      '-g'|'--genres')
-        get_genres "$RESOURCE_FILE"
+      '-t'|'--types')
+        get_types "$RESOURCE_FILE"
         return 0
         ;;
 
-      '--sd')
-        use_echosd=true
+      '-g'|'--genres')
+        get_genres "$RESOURCE_FILE"
+        return 0
         ;;
 
       '-n'|'--linecount')
@@ -47,15 +47,24 @@ main() {
         fi
         ;;
 
+      '-a'|'--all')
+        print_all=true
+        ;;
+
       *)
         search_genres+=("$opt")
         ;;
     esac
   done
 
-  local search_genre="$(make_or_match_regexp ${search_genres[@]})"
-
-  say "$search_genre" "$line_count" "$ART_FILE" "$RESOURCE_FILE"
+  local regexp="$(make_or_match_regexp ${search_genres[@]})"
+  if [ "$print_all" = true ]; then
+    get_msgs "" "$regexp" "$RESOURCE_FILE"
+  else
+    get_msgs "" "$regexp" "$RESOURCE_FILE" \
+      | shuf \
+      | head -n "$line_count"
+  fi
 }
 
 usage() {
@@ -63,21 +72,23 @@ usage() {
 $SCRIPT_NAME はEDFのチャット定型文をランダムに出力する。
 
 Usage:
-    $SCRIPT_NAME [options] <genre...>
+    $SCRIPT_NAME [options] [search_word]
 
 Examples:
-    $SCRIPT_NAME -h
-    $SCRIPT_NAME -v
     $SCRIPT_NAME
-    $SCRIPT_NAME shout -n 5
+    $SCRIPT_NAME chat yes -n 2
+    $SCRIPT_NAME chat yes no -n 10
+    $SCRIPT_NAME communication-log 5
+    $SCRIPT_NAME communication-log scientist
+    $SCRIPT_NAME -a
 
 Options:
     -h, --help         このヘルプを出力する
     -v, --version      バージョン情報を出力する
-        --sd           echo-sdを使う
+    -t, --types        大分類を一覧を出力する
+    -g, --genres       小分類一覧を出力する
     -n, --linecount    何行出力するか [default: 1]
-    -g, --genres       検索ワード一覧を出力する
-    -N, --noedf        EDF隊員を出力しない
+    -a, --all          全部出力する
 EOS
 }
 
