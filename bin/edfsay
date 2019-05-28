@@ -40,22 +40,34 @@ main() {
 
 usage() {
   cat << EOS
-$SCRIPT_NAME はEDFがセリフを発する。
+$SCRIPT_NAME はEDFのセリフを出力する。
 
 Usage:
-    $SCRIPT_NAME [options] [messages...]
+    $SCRIPT_NAME [options]
+    $SCRIPT_NAME commlog [options]
+    $SCRIPT_NAME commlog [options] (2 | 3 | 4 | 5 | scientist)
+    $SCRIPT_NAME chat [options]
+
+Examples:
+    $SCRIPT_NAME
+    $SCRIPT_NAME chat yes
+    $SCRIPT_NAME chat angry
+    $SCRIPT_NAME commlog
+    $SCRIPT_NAME commlog 3
+    $SCRIPT_NAME commlog 4
+    $SCRIPT_NAME commlog 5
+    $SCRIPT_NAME commlog scientist
+
+Commands:
+    chat       $($THIS_DIR/$SCRIPT_NAME.chat -h | head -n 1)
+    commlog    $($THIS_DIR/$SCRIPT_NAME.commlog -h | head -n 1)
 
 Options:
-    -h, --help            このヘルプを出力する
-    -v, --version         バージョン情報を出力する
-        --edf             EDF! EDF!!
-    -t, --type <type>     実際のEDF隊員の発言を出力する [type | commlog]
-    -n, --linecount       何行出力するか [default: 1]
-                          typeオプションと合わせて使う。
-    -g, --genre <genre>   EDF隊員の発言を分類で絞り込む
-                          typeオプションと合わせて使う。
-                          分類は[yes | no | TODO]
-        --sd              echo-sdを使う
+    -h, --help          このヘルプを出力する
+    -v, --version       バージョン情報を出力する
+        --sd            echo-sdを使う
+    -n, --linecount     何行出力するか [default: 1]
+        --edf           EDF! EDF!!
 EOS
 }
 
