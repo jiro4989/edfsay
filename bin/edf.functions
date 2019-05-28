@@ -12,7 +12,7 @@ say() {
 # セリフを吹き出しで囲う。
 wrap_quotes() {
   local msg="$1"
-  msg="$(echo "$msg" | sed 'y/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?-= |~@/ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９！？ー＝　｜〜＠/')"
+  msg="$(echo "$msg" | sed 'y/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?-= |~@./ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９！？ー＝　｜〜＠・/')"
   local i=1
   echo " _____________________________________________________________________"
   echo "|                                                                     |"

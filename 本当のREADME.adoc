@@ -24,3 +24,46 @@ $ edf say --edf
 $ edf -h
 $ edf words yes angry -n 10
 ----
+
+[source,bash]
+----
+% edf say $(edf words)
+ _____________________________________________________________________
+|                                                                     |
+|    こちらスカウト。大型の輸送船が作戦エリアに出現！　　　　　　     |
+|                                                                     |
+|_________________________________________  __________________________|
+                                          |/                           
+
+                             ..(...
+                          .-THHHffWn,
+                          dWHJHHkkyUWn.                          .&-         `
+                         .k@@NjH#Wkz1H<,                         j_$   .+Jv!`
+                         dHHHMdMNkWc(WII                   ..(gHyXAwvY7!
+                         JH@HH@Hgg@HHHWW             ...JdMHMMHM#1~!
+                         ?H@gMMHHHHH9UWY .....  .JJgHMMHMMMMMHY=_`
+                         .$(U@qn~d{.(HHMMBSdMWdMMMHMHHH#M@Hr
+                 ..(.(mJWHoRWMNHv0OMMNgHMSXwXdkMHMMHMNdMH%
+                ?WHHHWWWHHWMkdM#Ma+HHHHWNMMMH@HHH?NMMMM#=
+                 (gmHH9HMMNMNRdQgMMMMBwMMMMMMMNV3JMMMM8-
+                .MHHMHd@MMNMMMMMM#MMkWMMHWM#HHHJYH@m+-+
+               ,MMMWXWWMMMHHHMMMNMMNXM@@HkM##MHHwWHWkIO
+               .HHWWUUWHMMMMWHXWMMHMdMMMHHMM####NdMHWUw,
+              JMBYH961++JXWk-XWHHHMNNMMMHMHMMM##MNdMHkgH_
+            .HMmgWHmrwWWSwXHHJNHHMMMMMMMMMM\ (HMMHHMMMMf`
+             WMMMMHHkdH@HgHkHMNHSMNMMNqkHMn      _???7^
+             .TMMHMMM#9NNNNHHMkWQMHHHNMM@Ed.
+                      .MNNNHMMHH##NNMMMHdHm`
+                       (MNMMMHMMMMMMHHMMMHb
+                        (WHNHMMNQMMHMMMHWWX\
+                         .MMMMM@MMHWWWHWkWdL
+                         .MMHHgMHHMkHHMHH#=j-
+                         JM#H@HHWyWkHNWbs>~_l
+                         Wg@@HmHHMNMMMHHSi(,w%
+                         ?HHM@@@HMMMM@@HY>~~jm,
+                          dHH86dmgHMHMHk>_ ..XI
+                          HHyXd@HHMMMHHXZ< ..JX_
+                          dMMW@MMMHWMHk77?` _Hd)
+                          ,MMHHHkWpWWHWV<.`  dH!
+                           TMNHqqHWHWHWkwz;_!(`
+----
