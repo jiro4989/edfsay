@@ -67,20 +67,19 @@ usage() {
 $SCRIPT_NAME はEDFのチャット定型文や通信記録をランダムに出力する。
 
 Usage:
-    $SCRIPT_NAME [options] [search_word...]
+    $SCRIPT_NAME [options] [genres...]
 
 Examples:
     $SCRIPT_NAME
-    $SCRIPT_NAME chat yes -n 2
-    $SCRIPT_NAME chat yes no -n 10
-    $SCRIPT_NAME communication-log 5
-    $SCRIPT_NAME communication-log scientist
+    $SCRIPT_NAME yes -n 2
+    $SCRIPT_NAME yes no -n 10
+    $SCRIPT_NAME scientist EDF5
     $SCRIPT_NAME -a
 
 Options:
     -h, --help         このヘルプを出力する
     -v, --version      バージョン情報を出力する
-    -g, --genres       小分類一覧を出力する
+    -g, --genres       指定できるgenres一覧を出力する
     -n, --linecount    何行出力するか [default: 1]
     -a, --all          全部出力する
 EOS
