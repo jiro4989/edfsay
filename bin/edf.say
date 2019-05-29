@@ -6,12 +6,12 @@ source "$THIS_DIR/edf.functions"
 readonly SCRIPT_NAME="$(get_script_name)"
 readonly VERSION=v1.0.0
 readonly RESOURCE_DIR=${RESOURCE_DIR:-$THIS_DIR/../etc/edfsay}
-readonly ART_FILE=$RESOURCE_DIR/ranger.txt
 
 main() {
-  local use_echosd=false
   local no_edf=false
   local msg=""
+  local art_file=$RESOURCE_DIR/ranger.txt
+  local use_ansi_ranger=false
 
   while (( 0 < $# )); do
     local opt=$1
@@ -28,12 +28,17 @@ main() {
         return 0
         ;;
 
-      --sd)
-        use_echosd=true
+      -i|--stdin)
+        msg="$(cat)"
         ;;
 
       -N|--noedf)
         no_edf=true
+        ;;
+
+      -A|--ansi)
+        use_ansi_ranger=true
+        art_file="$RESOURCE_DIR/ranger_ansi.txt"
         ;;
 
       *)
@@ -46,7 +51,11 @@ main() {
     msg="EDF! EDF!!"
   fi
 
-  _say "$ART_FILE" "$msg"
+  if [ "$use_ansi_ranger" = true ]; then
+    _say "$art_file" "$msg" | sed -E 's/.*/\x1b[30m\x1b[48;5;231m&\x1b[m/g'
+  else
+    _say "$art_file" "$msg"
+  fi
 }
 
 usage() {
@@ -65,9 +74,8 @@ Options:
     -h, --help         このヘルプを出力する
     -v, --version      バージョン情報を出力する
     -i, --stdin        標準入力を受け付ける
-        --sd           echo-sdを使う
     -N, --noedf        EDF隊員を出力しない
-        --ansi         ANSIレンジャーを出力する
+    -A, --ansi         ANSIレンジャーを出力する
 EOS
 }
 
@@ -85,7 +93,7 @@ _wrap_quotes() {
   local msg="$1"
   msg="$(echo "$msg" | sed 'y/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?-= |~@./ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９！？ー＝　｜〜＠・/')"
   local i=1
-  echo " _____________________________________________________________________"
+  echo ".---------------------------------------------------------------------."
   echo "|                                                                     |"
   (
   n="$(echo "$msg" | wc -l)"
@@ -93,7 +101,7 @@ _wrap_quotes() {
   echo "$msg$pad" | grep -o ..............................
   ) | sed -E 's/.*/|    &     |/g'
   echo "|                                                                     |"
-  echo "|_________________________________________  __________________________|"
+  echo "\`-----------------------------------------. .-------------------------'"
   echo "                                          |/                           "
 }
 
