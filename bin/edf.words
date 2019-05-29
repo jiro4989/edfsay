@@ -64,7 +64,7 @@ main() {
 
 usage() {
   cat << EOS
-$SCRIPT_NAME はEDFのチャット定型文をランダムに出力する。
+$SCRIPT_NAME はEDFのチャット定型文や通信記録をランダムに出力する。
 
 Usage:
     $SCRIPT_NAME [options] [search_word...]

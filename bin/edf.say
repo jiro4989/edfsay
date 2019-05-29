@@ -42,7 +42,7 @@ main() {
         ;;
 
       *)
-        msg+="$msg$opt"
+        msg="$msg$opt"
         ;;
     esac
   done
@@ -67,8 +67,8 @@ Usage:
 
 Examples:
     $SCRIPT_NAME
-    $SCRIPT_NAME EDF! EDF!!
-    $SCRIPT_NAME --sd EDFは仲間を見捨てない。本当だな。
+    $SCRIPT_NAME EDFは仲間を見捨てない。本当だな。
+    echo うおおおおー！ | $SCRIPT_NAME -i
 
 Options:
     -h, --help         このヘルプを出力する

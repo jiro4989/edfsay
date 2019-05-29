@@ -52,8 +52,8 @@ $(_get_usage_sections Examples:)
 $(_get_usage_short_descriptions)
 
 Options:
-    -h, --help          このヘルプを出力する
-    -v, --version       バージョン情報を出力する
+    -h, --help       このヘルプを出力する
+    -v, --version    バージョン情報を出力する
 EOS
 }
 
