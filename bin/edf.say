@@ -74,7 +74,6 @@ Options:
     -h, --help         このヘルプを出力する
     -v, --version      バージョン情報を出力する
     -i, --stdin        標準入力を受け付ける
-    -N, --noedf        EDF隊員を出力しない
     -A, --ansi         ANSIレンジャーを出力する
 EOS
 }
@@ -84,25 +83,25 @@ _say() {
   local art_file="$1"
   shift
   local msg="$@"
-  _wrap_quotes "$msg"
+  _wrap_words "$msg"
   cat "$art_file"
 }
 
 # セリフを吹き出しで囲う。
-_wrap_quotes() {
+_wrap_words() {
   local msg="$1"
   msg="$(echo "$msg" | sed 'y/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!?-= |~@./ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ０１２３４５６７８９！？ー＝　｜〜＠・/')"
   local i=1
-  echo ".---------------------------------------------------------------------."
-  echo "|                                                                     |"
+  echo ".----------------------------------------------------------------------."
+  echo "|　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　|"
   (
   n="$(echo "$msg" | wc -l)"
-  pad="$(seq $((30 - (30 % n))) | xargs -I@ bash -c 'echo -n "　"')"
-  echo "$msg$pad" | grep -o ..............................
-  ) | sed -E 's/.*/|    &     |/g'
-  echo "|                                                                     |"
-  echo "\`-----------------------------------------. .-------------------------'"
-  echo "                                          |/                           "
+  pad="$(seq $((31 - (31 % n))) | xargs -I@ bash -c 'echo -n "　"')"
+  echo "$msg$pad" | grep -o ...............................
+  ) | sed -E 's/.*/|　　&　　|/g'
+  echo "|　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　|"
+  echo "\`------------------------------------------. .-------------------------'"
+  echo "　　　　　　　　　　　　　　　　　　　　　 |/　　　　　　　　　　　　　 "
 }
 
 main ${1+"$@"}
